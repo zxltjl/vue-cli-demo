@@ -39,12 +39,10 @@
 </template>
 
 <script>
-    import {mixin} from '@/mixins/layout';
     import { mapState,mapActions } from 'vuex';
     import {updateThemes} from './change'
     export default {
         name: 'Setting',
-        mixins:[mixin],
         props: {
             visible: Boolean
         },

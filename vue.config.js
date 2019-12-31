@@ -17,6 +17,7 @@ module.exports = {
     // baseUrl: process.env.NODE_ENV === 'production' ? '/development/' : '/',
     publicPath:'./',
     outputDir:'demo',
+    productionSourceMap: false,
     devServer: {
         port:8888,
         open:true
@@ -33,7 +34,7 @@ module.exports = {
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         // 生成仅包含颜色的替换样式（主题色等）
         new ThemeColorReplacer({
-          fileName: 'css/theme-colors.css',
+          fileName: '/css/theme-colors.css',
           matchColors: getAntdSerials('#1890ff') // 主色系列
         })
       ]
