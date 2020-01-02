@@ -1,0 +1,1 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0db21a"],{"6f0d":function(n,t,e){"use strict";e.r(t);var u=function(){var n=this,t=n.$createElement,e=n._self._c||t;return e("div",[n._v("首页")])},c=[],a={data:function(){return{}},created:function(){}},r=a,d=e("2877"),i=Object(d["a"])(r,u,c,!1,null,null,null);t["default"]=i.exports}}]);

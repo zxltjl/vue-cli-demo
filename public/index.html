@@ -5,13 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="./logo.jpg">
+    <link rel="stylesheet" href="./loading.css">
     <title>vue-cli-demo</title>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but vue-cli-demo doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+      <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+        <div class="load_title">加载中...
+        </div>
+      </div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>

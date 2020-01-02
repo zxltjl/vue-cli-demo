@@ -10,7 +10,8 @@
                     :menuData="menuData" 
                     mode="inline"
                     :theme="theme"
-                    :defaultSelectedKeys="['Index']"
+                    :selected-keys="currentName"
+                    :open-keys.sync="openKeys"
                     @select="menuSelect"
                 />
             </ALayoutSider>
@@ -30,7 +31,9 @@
                 <ALayoutContent
                     class="basic-content"
                 >
-                    <RouterView />
+                    <keep-alive>
+                        <RouterView />
+                    </keep-alive>
                 </ALayoutContent>
             </ALayout>
         </ALayout>
@@ -101,7 +104,9 @@ export default {
                     }
                 ]
             }
-        ]
+        ],
+        currentName:[this.$route.name],
+        openKeys:[]
       };
     },
     created(){
@@ -110,6 +115,13 @@ export default {
         ...mapState('app',{
             theme:state=>state.theme
         })
+    },
+    watch:{
+        '$route.name': {
+                handler (newVal) {
+                    this.currentName.splice(0, 1, newVal);
+                }
+            },
     },
     methods:{
         //主题设置切换按钮
@@ -140,9 +152,10 @@ export default {
         width:100%;
     }
     .basic-content{
-        margin:20px;
+        margin:20px 10px;
         padding:20px;
         background:#fff;
+        overflow:auto;
     }
     /deep/.basic-header{
         padding:0 20px;
