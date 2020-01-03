@@ -1,18 +1,20 @@
 <template>
-    <div>首页</div>
+    <div style="color:red;">
+        首页
+    </div>
 </template>
 
 <script>
-export default {
-    data(){
-        return {
+    export default {
+        data() {
+            return {
             
+            };
+        },
+        created() {
+            // this.unique()
         }
-    },
-    created(){
-        
-    }
-}
+    };
 </script>
 
 <style>

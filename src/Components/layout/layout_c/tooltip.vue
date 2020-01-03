@@ -1,7 +1,13 @@
 <template functional>
     <ATooltip title="界面设置">
-        <div v-on="listeners" class="setting v-icon-hover">
-            <AIcon type="setting" class="setting-icon" />
+        <div
+            v-on="listeners"
+            class="setting v-icon-hover"
+        >
+            <AIcon
+                type="setting"
+                class="setting-icon"
+            />
         </div>
     </ATooltip>
 </template>

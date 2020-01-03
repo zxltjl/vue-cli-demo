@@ -1,13 +1,19 @@
 <template>
     <div id="basic-layout">
-        <ThemeSetting :visible="visible" @change="change"/>
-        <!-- {{theme}}
-        {{$store.state.app.color}} -->
-        <ALayout class="layout-box" >
-            <ALayoutSider :trigger="null" collapsible v-model="collapsed" :theme="theme">
+        <ThemeSetting
+            :visible="visible"
+            @change="change"
+        />
+        <ALayout class="layout-box">
+            <ALayoutSider
+                :trigger="null"
+                collapsible
+                v-model="collapsed"
+                :theme="theme"
+            >
                 <Logo :collapsed="collapsed" />
                 <Menu 
-                    :menuData="menuData" 
+                    :menu-data="menuData" 
                     mode="inline"
                     :theme="theme"
                     :selected-keys="currentName"
@@ -25,9 +31,10 @@
                         />
                     </div>
                     <div class="tools">
-                         <Tooltip @click="toggleDraw" />
+                        <Tooltip @click="toggleDraw" />
                     </div>
                 </ALayoutHeader>
+                <Tabs />
                 <ALayoutContent
                     class="basic-content"
                 >
@@ -41,105 +48,86 @@
 </template>
 
 <script>
-import Logo from './layout_c/Logo';
-import Menu from './layout_c/menu';
-import Tooltip from './layout_c/tooltip'
-import ThemeSetting from './layout_c/themeSetting'
-import {mapState} from 'vuex'
-export default {
-    components:{
-        Logo,
-        Menu,
-        Tooltip,
-        ThemeSetting
-    },
-    data() {
-      return {
-        collapsed: false,
-        visible:false,
-        menuData:[
-            {
-                path:'index',
-                name:'Index',
-                meta:{
-                    title:'首页'
-                }
-            },
-            {
-                path:'tinymic',
-                name:'Tinymic',
-                meta:{
-                    title:'富文本'
-                }
-            },
-            {
-                path:'process',
-                name:'Process',
-                meta:{
-                    title:'表格'
-                },
-                children:[
-                    {
-                        path:'table1',
-                        name:'Table1',
-                        meta:{
-                            title:"表格1"
-                        }
-                    },
-                    {
-                        path:'table2',
-                        name:'Table2',
-                        meta:{
-                            title:"表格2"
-                        },
-                        children:[
-                            {
-                                path:'2',
-                                name:'对',
-                                meta:{
-                                    title:'哈哈'
-                                }
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
-        currentName:[this.$route.name],
-        openKeys:[]
-      };
-    },
-    created(){
-    },
-    computed:{
-        ...mapState('app',{
-            theme:state=>state.theme
-        })
-    },
-    watch:{
-        '$route.name': {
+    import Logo from './layout_c/Logo';
+    import Menu from './layout_c/menu';
+    import Tooltip from './layout_c/tooltip';
+    import Tabs from './layout_c/tabs'
+
+
+    import ThemeSetting from './layout_c/themeSetting';
+    import {mapState} from 'vuex';
+    export default {
+        components:{
+            Logo,
+            Menu,
+            Tooltip,
+            ThemeSetting,
+            Tabs,
+        },
+        data() {
+            return {
+                collapsed: false,//导航折叠
+                visible:false,//主题设置组件
+                currentName:[this.$route.name],//当前打开菜单
+                menuData:[],//菜单
+                openKeys:[]
+            };
+        },
+        computed:{
+            ...mapState('app',{
+                theme:state=>state.theme
+            })
+        },
+        watch:{
+            '$route.name': {
                 handler (newVal) {
                     this.currentName.splice(0, 1, newVal);
                 }
             },
-    },
-    methods:{
-        //主题设置切换按钮
-        toggleDraw(){
-            this.visible = true;
         },
-        change(val){
-            this.visible = val;
+        created() {
+            this.loadMenu();
+            this.findOpenkeys(this.$route.name,this.menuData);
+
         },
-        menuSelect(val){
-            if(val.key){
-                this.$router.push({
-                    name:val.key
+        methods:{
+            findOpenkeys(current,data){
+                data.forEach(item=>{
+                    if(item.children){
+                        item.children.forEach(item1=>{
+                            if(item1.name === current){
+                                this.openKeys.push(item.name);
+                            }
+                            if(item1.children){
+                                this.findOpenkeys(this.$route.name,item1.children)
+                            }
+                        })
+                    }
                 })
-            }
-        },
-    }
-};
+            },
+            //获取路由表
+            loadMenu(){
+                const menuList = this.$router.options.routes.filter(item=>item.name==='Home')[0].children.sort((a,b)=>a.sort-b.sort);
+                if(Array.isArray(menuList)){
+                    this.menuData = menuList
+                }
+            },
+            //主题设置切换按钮
+            toggleDraw() {
+                this.visible = true;
+            },
+            change(val) {
+                this.visible = val;
+            },
+            menuSelect(val) {
+                if (val.key) {
+                    this.$router.push({
+                        name:val.key
+                    });
+                }
+            },
+        }
+    };
 </script>
 
 <style lang="less" scoped>
@@ -152,7 +140,7 @@ export default {
         width:100%;
     }
     .basic-content{
-        margin:20px 10px;
+        margin:10px;
         padding:20px;
         background:#fff;
         overflow:auto;

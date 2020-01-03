@@ -8,12 +8,13 @@ export default {
         changeStae: (state, obj)=>{
             Object.entries(obj).forEach(([key,value])=>{
                 state[key] = value;
-            })
+            });
         },
     },
     actions:{
-        ToggleState({commit},obj){
-            commit('changeStae',obj)
+        ToggleState({commit},obj) {
+            commit('changeStae',obj);
         },
+
     }
-}
+};

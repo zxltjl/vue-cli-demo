@@ -1,23 +1,31 @@
 <template>
     <div class="logo-box">
-        <img class="demo-vertical" src="@/assets/images/logo.jpg" alt="" srcset="">
-        <span class="demo-vertical" v-if="!collapsed">VUE-CLI-DEMO</span>
+        <img
+            class="demo-vertical"
+            src="@/assets/images/logo.jpg"
+            alt=""
+            srcset=""
+        >
+        <span
+            class="demo-vertical"
+            v-if="!collapsed"
+        >VUE-CLI-DEMO</span>
     </div>
 </template>
 
 <script>
-export default {
-    props:{
-        collapsed:{
-            type:Boolean,
-            default:false
+    export default {
+        props:{
+            collapsed:{
+                type:Boolean,
+                default:false
+            }
+        },
+        data() {
+            return {
+            };
         }
-    },
-    data(){
-        return{
-        }
-    }
-}
+    };
 </script>
 
 <style lang="less" scoped>

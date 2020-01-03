@@ -1,13 +1,13 @@
 <template>
     <div>
-        用户登录
+        search
     </div>
 </template>
 
 <script>
     export default {
 
-    };
+    }
 </script>
 
 <style>
