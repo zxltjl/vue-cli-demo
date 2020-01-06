@@ -1,3 +1,4 @@
+import RouterView from '@/Components/layout/RouterView'
 export default [
     {
         sort:3,
@@ -6,6 +7,10 @@ export default [
         meta:{
             title:"公共组件"
         },
+        redirect:{
+            name:'PublicCiomponentSearch'
+        },
+        component:RouterView,
         children:[
             {
                 path:'public-component-table',

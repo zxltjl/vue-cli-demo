@@ -6,6 +6,7 @@
         />
         <ALayout class="layout-box">
             <ALayoutSider
+                class="layout-sider"
                 :trigger="null"
                 collapsible
                 v-model="collapsed"
@@ -23,13 +24,20 @@
             </ALayoutSider>
             <ALayout>
                 <ALayoutHeader class="basic-header">
-                    <div class="inline-block">
+                    <div class="inline-block" @click="collapsed = !collapsed">
                         <AIcon
                             class="trigger"
                             :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                            @click="collapsed = !collapsed"
                         />
                     </div>
+                    <!-- <Menu 
+                        :menu-data="menuData" 
+                        mode="horizontal"
+                        :theme="theme"
+                        :selected-keys="currentName"
+                        :open-keys.sync="openKeys"
+                        @select="menuSelect"
+                    /> -->
                     <div class="tools">
                         <Tooltip @click="toggleDraw" />
                     </div>
@@ -88,7 +96,6 @@
         created() {
             this.loadMenu();
             this.findOpenkeys(this.$route.name,this.menuData);
-
         },
         methods:{
             findOpenkeys(current,data){
@@ -138,6 +145,10 @@
     .layout-box{
         height:100%;
         width:100%;
+    }
+    .layout-sider{
+        height:100%;
+        overflow:auto;
     }
     .basic-content{
         margin:10px;

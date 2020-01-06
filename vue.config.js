@@ -5,7 +5,6 @@ const resolveDir = function (dir) {
 const webpack = require('webpack');
 const ThemeColorReplacer = require('webpack-theme-color-replacer');
 function getAntdSerials (color) {
-    console.log(color);
     let lightens = new Array(9).fill().map((t, i) => ThemeColorReplacer.varyColor.lighten(color, i / 10));
     let darkens = new Array(6).fill().map((t, i) => ThemeColorReplacer.varyColor.darken(color, i / 10));
     return lightens.concat(darkens);
@@ -23,6 +22,25 @@ module.exports = {
         //修改文件引入自定义路径
         config.resolve.alias
             .set('@', resolveDir('src'));
+        //解析svg
+        const svgRule = config.module.rule('svg');
+        svgRule.uses.clear();
+        svgRule
+        .use('babel-loader')
+        .loader('babel-loader')
+        .end()
+        .use('vue-svg-loader')
+        .loader('vue-svg-loader')
+        .options({
+            svgo: {
+            plugins: [
+                { removeDoctype: true },
+                { removeComments: true },
+                { removeViewBox: false }
+            ],
+            removeViewBox: false,
+            },
+        }).end()
     },
     configureWebpack: {
         plugins: [

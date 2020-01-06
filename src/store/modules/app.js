@@ -3,6 +3,7 @@ export default {
     state:{
         color:'#722ED1',
         theme:'dark',
+        layout:'vertical'
     },
     mutations:{
         changeStae: (state, obj)=>{

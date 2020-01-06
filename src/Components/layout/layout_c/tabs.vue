@@ -61,6 +61,13 @@
                     this.fullPathList.push(newVal.fullPath);
                 }
             },
+            fullPathList:function(newVal){
+                if(newVal.length===1){
+                    this.disabled = true;
+                }else{
+                    this.disabled = false;
+                }
+            }
         },
         computed:{
 
@@ -80,13 +87,27 @@
             this.fullPathList.push(this.$route.fullPath);
         },
         methods:{
+            //关闭当前标签
             closeCurrent(){
-
+                const i = this.fullPathList.findIndex(value=>value===this.activeKey);
+                const len = this.fullPathList.length;
+                if(i<(len-1)){
+                    this.activeKey = this.fullPathList[(i+1)];
+                }else{
+                    this.activeKey = this.fullPathList[(i-1)];
+                }
+                this.fullPathList.splice(i,1);
+                this.routerCache.splice(i,1);
+                this.$router.push({
+                    path:this.activeKey
+                })
             },
+            //关闭所有标签
             closeAll(){
-                this.fullPathList = [];
-                this.routerCache = [];
-                this.$router.push({name:'Index'})  
+                if(this.routerCache.length>1){
+                    this.fullPathList = [this.activeKey];
+                    this.routerCache = this.routerCache.filter(item=>item.path===this.activeKey); 
+                }
             },
             //点击tabs的回调
             callback(val){

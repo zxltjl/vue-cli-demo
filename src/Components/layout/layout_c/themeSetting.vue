@@ -6,12 +6,32 @@
         class="setting"
         title="界面设置"
     >
-        <div :style="{ marginBottom: '24px' }">
-            <h3 class="setting-drawer-index-title">
-                主题色
+        <!-- 菜单风格（左侧垂直、顶部水平） -->
+        <div class="vertical-space">
+            <h3>
+                布局风格
             </h3>
-
-            <div style="height: 20px">
+            <div class="flex">
+                <a-tooltip title="暗色" @click="ToggleState({theme:'dark'})">
+                    <div class="setting-layout">
+                        <DarkMenuSvg v-once />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='dark'" />
+                    </div>
+                </a-tooltip>
+                <a-tooltip title="亮色" @click="ToggleState({theme:'light'})">
+                    <div class="setting-layout">
+                        <LightMenuSvg v-once />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='light'" />
+                    </div>
+                </a-tooltip>
+            </div>
+        </div>
+        <!-- 主题颜色风格 -->
+        <div class="vertical-space">
+            <h3>
+                主题风格
+            </h3>
+            <div style="margin:15px 0;height:20px;">
                 <a-tooltip
                     class="setting-drawer-theme-color-colorBlock"
                     v-for="(item, index) in colorList"
@@ -32,38 +52,39 @@
                 </a-tooltip>
             </div>
         </div>
-        <div class="switch">
-            <span
-                class="demo-vertical"
-                style="margin-right:20px;"
-            >色弱模式</span>
-            <a-switch
-                class="demo-vertical"
-                @change="switchChange"
-            />
-        </div>
-        <div style="margin:20px 0;">
-            <h3 class="setting-drawer-index-title">
-                菜单风格
+        <div class="vertical-space">
+            <h3>
+                导航菜单风格
             </h3>
-            <div>
-                <span
-                    class="demo-vertical"
-                    style="margin-right:20px;"
-                >暗色</span>
-                <a-switch
-                    class="demo-vertical"
-                    @change="themeChange1"
-                />
+            <div class="flex">
+                <a-tooltip title="暗色" @click="ToggleState({theme:'dark'})">
+                    <div class="setting-layout">
+                        <VerticalSvg v-once />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='dark'" />
+                    </div>
+                </a-tooltip>
+                <a-tooltip title="亮色" @click="ToggleState({theme:'light'})">
+                    <div class="setting-layout">
+                        <HorizontalSvg v-once />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='light'" />
+                    </div>
+                </a-tooltip>
             </div>
-            <div>
+        </div>
+        <div class="vertical-space">
+            <h3>
+                其他设置
+            </h3>
+            <div class="flex">
                 <span
                     class="demo-vertical"
                     style="margin-right:20px;"
-                >浅色</span>
+                >
+                    色弱模式
+                </span>
                 <a-switch
                     class="demo-vertical"
-                    @change="themeChange2"
+                    @change="switchChange"
                 />
             </div>
         </div>
@@ -72,9 +93,20 @@
 
 <script>
     import { mapState, mapActions } from 'vuex';
+
+    import LightMenuSvg from '@/assets/svg/lightMenu.svg?inline';
+    import DarkMenuSvg from '@/assets/svg/darkMenu.svg?inline';
+    import VerticalSvg from '@/assets/svg/vertical.svg?inline';
+    import HorizontalSvg from '@/assets/svg/horizontal.svg?inline';
     import { updateThemes } from './change';
     export default {
         name: 'Setting',
+        components: {
+            LightMenuSvg,
+            DarkMenuSvg,
+            VerticalSvg,
+            HorizontalSvg
+        },
         model: {
             prop: 'visible',
             event: 'change'
@@ -129,12 +161,6 @@
                 this.ToggleState({ color });
                 updateThemes(color);
             },
-            themeChange1 () {
-                this.ToggleState({ theme: 'dark' });
-            },
-            themeChange2 () {
-                this.ToggleState({ theme: 'light' });
-            },
             switchChange (val) {
                 val ? document.body.classList.add('colorWeak') : document.body.classList.remove('colorWeak');
             },
@@ -146,6 +172,23 @@
 </script>
 
 <style lang="less" scoped>
+.vertical-space{
+    margin-bottom:25px; 
+}
+.flex{
+    display:flex;
+    justify-content:space-around;
+    margin:10px 0;
+}
+.setting-layout{
+    position:relative;
+    display:inline-block;
+}
+.check-icon{
+    position:absolute;
+    top:15px;
+    left:25px;
+}
 .setting-drawer-theme-color-colorBlock {
   width: 20px;
   height: 20px;

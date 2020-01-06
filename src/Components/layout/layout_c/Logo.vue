@@ -34,7 +34,7 @@
         height:64px;
         width:100%;
         text-align:center;
-        margin-bottom:20px;
+        margin-bottom:5px;
         line-height:64px;
         color:#fff;
         img{

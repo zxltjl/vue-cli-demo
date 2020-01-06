@@ -12,7 +12,7 @@
             };
         },
         created() {
-            // this.unique()
+            this.$db.set(111)
         }
     };
 </script>
