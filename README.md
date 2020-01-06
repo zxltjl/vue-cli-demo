@@ -8,6 +8,8 @@
 2.npm install / cnpm install / yarn 
 
 3.npm run serve / yarn serve
+
+
 ---
 ## 功能
 - 主题修改
