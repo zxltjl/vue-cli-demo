@@ -18,7 +18,11 @@ const config = freeze({
     //token
     token:{
 
-    }
+    },
+    //localstorge前缀
+    prefix:'demo',
+    //localstorge过期时间(单位：天)
+    expires:7,
 })
 
 export default config

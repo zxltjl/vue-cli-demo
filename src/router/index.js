@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+// import db from '@/libs/db'
 import NProgress from 'nprogress';
 import '../assets/style/nprocess.less';//引入自定义的nprocess样式
 Vue.use(VueRouter);
@@ -30,15 +31,18 @@ const router = new VueRouter({
             children:loadRoutes()
         },
         {
-            path:'login',
+            path:'/user',
             name:'Login',
+            meta:{
+                title:'登录'
+            },
             component:()=>import('@/Components/layout/userLayout.vue')
-        }
+        },
     ]
 });
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    next();
+    next()
     /* 必须调用 `next` */
 });
   

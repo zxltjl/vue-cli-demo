@@ -4,6 +4,7 @@ import prototypies from './prototypies'
 import components from './components'
 
 
+
 //挂载方法和属性
 const addPrototypies = (value,proto)=>{
     Object.entries(value).forEach(([key,val])=>{
