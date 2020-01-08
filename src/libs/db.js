@@ -60,7 +60,7 @@ const MyProto = (function(){
         remove(key){
             MyProto.removeValue(key)
         }
-        //清除与改系统有关的所有localstorge
+        //清除与该系统有关的所有localstorge
         clear () {
             Object.keys(localStorage).forEach(key => {
                 if (key.includes(config.prefix)) {

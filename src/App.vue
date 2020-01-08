@@ -7,12 +7,12 @@
 </template>
 
 <script>
-    import zhCN from 'ant-design-vue/lib/locale-provider/zh_CN';
+    import enUS from 'ant-design-vue/lib/locale-provider/en_US';
     export default {
         name: 'App',
         data() {
             return {
-                locale: zhCN,
+                locale: enUS,
             };
         },
         created() {

@@ -47,7 +47,6 @@ router.beforeEach((to, from, next) => {
 });
   
 router.beforeResolve((to, from, next) => {
-    // console.log(to);
     next();
 /* 必须调用 `next` */
 });
