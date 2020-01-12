@@ -9,6 +9,18 @@ function getAntdSerials (color) {
     let darkens = new Array(6).fill().map((t, i) => ThemeColorReplacer.varyColor.darken(color, i / 10));
     return lightens.concat(darkens);
 }
+
+// 复制 tinymce 所需的静态资源
+const copyOptions = [
+    {
+        from: resolveDir('./src/Components/static/langs'),
+        to: './editor/langs'
+    },
+    {
+        from: resolveDir('./src/Components/static/skins'),
+        to: './editor/skins'
+    }
+];
 module.exports = {
     // baseUrl: process.env.NODE_ENV === 'production' ? '/development/' : '/',
     publicPath:'./',
@@ -40,7 +52,9 @@ module.exports = {
             ],
             removeViewBox: false,
             },
-        }).end()
+        }).end();
+        const hasCopy = config.plugins.has('copy');
+        if (hasCopy) config.plugin('copy').tap(args => [args[0].concat(copyOptions)]);
     },
     configureWebpack: {
         plugins: [
@@ -69,4 +83,3 @@ module.exports = {
         }
     }
 };
-
