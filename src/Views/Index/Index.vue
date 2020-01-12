@@ -13,7 +13,6 @@
             };
         },
         created() {
-            console.log(2222)
             var url="http://localhost:3000/login"       
             axios.post(url,{username:'superman',password:'123456789'})
                 .then(function (response) {
