@@ -12,13 +12,17 @@ const config = freeze({
 
     //api路径
     baseUrl:{
-        development:'',
-        production:''
+        development:'http://localhost:3000/',
+        production:'http://localhost:3000/'
     },
     //token
-    token:{
-
+    token: {
+        // 'headers' | 'params' | 'data'
+        position: 'headers',
+        key: 'Authorization',
+        value: 'Bearer TOKEN',
     },
+    
     //localstorge前缀
     prefix:'demo',
     //localstorge过期时间(单位：天)

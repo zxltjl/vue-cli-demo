@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import db from '@/libs/db'
-import store from '../store';
+import db from '@/libs/db'
+// import store from '../store';
 import NProgress from 'nprogress';
 import '../assets/style/nprocess.less';//引入自定义的nprocess样式
 Vue.use(VueRouter);
@@ -53,7 +53,7 @@ const isRouterAuth = function (to, from, next) {
 
 //第一次进入
 const isFirstEnter = async function (to, from, next) {
-    if (!store.state.user.token) {
+    if (!db.get('token')) {
         if(to.name==='Login'){
             next();
         }else{

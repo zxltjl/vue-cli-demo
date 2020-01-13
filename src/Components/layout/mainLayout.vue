@@ -40,6 +40,7 @@
                     /> -->
                     <div class="tools">
                         <Tooltip @click="toggleDraw" />
+                        <User />
                     </div>
                 </ALayoutHeader>
                 <Tabs />
@@ -59,11 +60,13 @@
     import Logo from './layout_c/Logo';
     import Menu from './layout_c/menu';
     import Tooltip from './layout_c/tooltip';
+    import User from './layout_c/user';
     import Tabs from './layout_c/tabs'
 
 
     import ThemeSetting from './layout_c/themeSetting';
-    import {mapState} from 'vuex';
+    import {mapState,mapMutations} from 'vuex';
+    import db from '@/libs/db';
     export default {
         components:{
             Logo,
@@ -71,6 +74,7 @@
             Tooltip,
             ThemeSetting,
             Tabs,
+            User
         },
         data() {
             return {
@@ -94,10 +98,13 @@
             },
         },
         created() {
+            this.setUserInfo(db.get('userInfo'));
+            this.setToken(db.get('token'));
             this.loadMenu();
             this.findOpenkeys(this.$route.name,this.menuData);
         },
         methods:{
+            ...mapMutations('user',['setUserInfo','setToken']),
             findOpenkeys(current,data){
                 data.forEach(item=>{
                     if(item.children){

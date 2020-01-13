@@ -78,18 +78,20 @@
             updateThemes(this.color);
         },
         methods:{
-            ...mapActions(['user','login']),
+            ...mapActions('user',['login']),
             //登录
             handleLogin(){
                 this.loading = true;
                 this.LoginForm.validateFieldsAndScroll((err,values)=>{
                     if(!err){
-                        setTimeout(() => {
-                            delete values.verification;
-                            this.login(values);
+                        delete values.verification;
+                        this.login(values).then(()=>{
                             this.loading = false;
-                            this.$router.push({name:'Index'})
-                        }, 1000);
+                            this.$router.push({name:'Home'});
+                        }).catch(err=>{
+                            this.loading = false;
+                            this.$message.error(err.msg)
+                        })
                     }else{
                         this.loading = false;
                     }
@@ -114,7 +116,7 @@
                         ]
                     },
                     password:{
-                        initialValue: '666666',
+                        initialValue: '123456',
                         validateFirst: true,
                         normalize: value => value ? value.toString().trim() : null,
                         rules: [
@@ -148,10 +150,10 @@
             },
             //验证码验证规则
             verificationValidator(rule,value,clallback){
-                if(value!==this.verification_code.toLocaleLowerCase()){
-                    clallback('验证码错误')
-                }else{
+                if(value===this.verification_code.toLocaleLowerCase()||value===this.verification_code.toLocaleUpperCase()){
                     clallback()
+                }else{
+                    clallback('验证码错误')
                 }
             },
         }

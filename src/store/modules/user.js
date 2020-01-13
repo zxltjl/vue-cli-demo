@@ -1,6 +1,7 @@
 import db from '@/libs/db'
-
+import {login} from '@/api/user'
 export default {
+    namespaced: true,
     state:{
         userInfo:'',
         token:''
@@ -13,19 +14,19 @@ export default {
         setToken(state,val){
             state.token = val;
             db.set('token',val)
-        }
+        },
     },
     actions:{   
         login({commit},val){
-            console.log(val);
-            const obj = {
-                avatar:'',
-                username:val.username,
-                nickname:val.username,
-                userId:''
-            };
-            commit('setUserInfo',obj);
-            commit('setToken','#ADFJHJASDNkkasdda213KDASDNJK')
-        }
+            return new Promise((resolve,reject)=>{
+                login(val).then(res=>{
+                    commit('setUserInfo',res.data.data.userinfo);
+                    commit('setToken',res.data.data.token.value)
+                    resolve()
+                }).catch((err)=>{
+                    reject(err)
+                })
+            })
+        },
     }
 };
