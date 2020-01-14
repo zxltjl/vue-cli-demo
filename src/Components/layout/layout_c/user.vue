@@ -21,24 +21,24 @@
     import { mapState } from 'vuex';
     import db from '@/libs/db';
     export default {
-        data(){
+        data() {
             return {
 
-            }
+            };
         },
         computed:{
             ...mapState('user',['userInfo'])
         },
-        created(){
+        created() {
         },
         methods:{
             //退出登录 清除localstorge
-            exit(){
+            exit() {
                 db.clear();
-                this.$router.push({name:'Login'})
+                this.$router.push({name:'Login'});
             }
         }
-    }
+    };
 </script>
 
 <style lang="less" scoped> 

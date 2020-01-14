@@ -1,5 +1,5 @@
-import db from '@/libs/db'
-import {login} from '@/api/user'
+import db from '@/libs/db';
+import {login} from '@/api/user';
 export default {
     namespaced: true,
     state:{
@@ -7,26 +7,26 @@ export default {
         token:''
     },
     mutations:{
-        setUserInfo(state,val){
+        setUserInfo(state,val) {
             state.userInfo = val;
-            db.set('userInfo',val)
+            db.set('userInfo',val);
         },
-        setToken(state,val){
+        setToken(state,val) {
             state.token = val;
-            db.set('token',val)
+            db.set('token',val);
         },
     },
     actions:{   
-        login({commit},val){
+        login({commit},val) {
             return new Promise((resolve,reject)=>{
                 login(val).then(res=>{
-                    commit('setUserInfo',res.data.data.userinfo);
-                    commit('setToken',res.data.data.token.value)
-                    resolve()
-                }).catch((err)=>{
-                    reject(err)
-                })
-            })
+                    commit('setUserInfo',res.data.userinfo);
+                    commit('setToken',res.data.token.value);
+                    resolve();
+                }).catch(err=>{
+                    reject(err);
+                });
+            });
         },
     }
 };

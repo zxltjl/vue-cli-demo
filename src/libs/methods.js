@@ -1,14 +1,10 @@
 
-const unique = ()=>{
-    return '.ssss'
-}
+const unique = ()=>'.ssss';
 /**
  * 
  */
 
-const Chinese = ()=>{
-    return '中文'
-}
+const Chinese = ()=>'中文';
 /**
  * @param(fn) 需要节流的函数
  * @param(t) 延时
@@ -19,7 +15,7 @@ const throttle = (fn,t)=>{
     let interval = t || 500;
     return function () {
         let args = arguments;
-        let now = +new Date();
+        let now = Number(new Date());
         if (last && now - last < interval) {
             clearTimeout(timer);
             timer = setTimeout(() => {
@@ -30,10 +26,10 @@ const throttle = (fn,t)=>{
             last = now;
             fn.apply(this, args);
         }
-    }      
-}
+    };      
+};
 export {
     unique,
     Chinese,
     throttle
-}
+};

@@ -1,11 +1,11 @@
-import RouterView from '@/Components/layout/RouterView'
+import RouterView from '@/Components/layout/RouterView';
 export default [
     {
         sort:3,
         path:'public-components',
         name:'PublicComponents',
         meta:{
-            title:"公共组件"
+            title:'公共组件'
         },
         redirect:{
             name:'PublicCiomponentSearch'

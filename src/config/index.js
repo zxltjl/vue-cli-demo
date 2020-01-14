@@ -1,11 +1,11 @@
 //冻结对象
-const freeze = (obj)=>{
+const freeze = obj=>{
     if (typeof obj === 'object' && !Object.isFrozen(obj)) {
         Object.freeze(obj);
         Object.keys(obj).forEach(property => freeze(obj[property]));
     }
     return obj;
-}
+};
 const config = freeze({
     //系统名称
     name:'VUE-CLI-DEMO',
@@ -27,6 +27,6 @@ const config = freeze({
     prefix:'demo',
     //localstorge过期时间(单位：天)
     expires:7,
-})
+});
 
-export default config
+export default config;

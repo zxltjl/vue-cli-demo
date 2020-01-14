@@ -5,7 +5,7 @@ import './assets/style/global.less';
 import App from './App.vue';
 import router from './router/index.js';
 import store from './store/index.js';
-import './libs/index'
+import './libs/index';
 
 
 Vue.use(ant);

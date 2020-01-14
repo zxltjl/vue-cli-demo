@@ -37,20 +37,10 @@
 <script>
     import { mapState,mapActions } from 'vuex';
     import {updateThemes} from './layout_c/change';
-    import valid from '../public_c/verification'
+    import valid from '../public_c/verification';
     export default {    
         components:{
             valid
-        },
-        data(){
-            return {
-                title:this.$app.name,//系统名称
-                LoginForm:this.$form.createForm(this),//包装组件
-                focus_input:false,//密码框聚焦
-                verification_code:'',//用户输入的验证码
-                loading:false,//登录按钮加载
-                showPassword:false,//显示密码
-            }
         },
         directives : {
             focus(el, {value}) {
@@ -63,15 +53,25 @@
                 }
             }
         },
+        data() {
+            return {
+                title:this.$app.name,//系统名称
+                LoginForm:this.$form.createForm(this),//包装组件
+                focus_input:false,//密码框聚焦
+                verification_code:'',//用户输入的验证码
+                loading:false,//登录按钮加载
+                showPassword:false,//显示密码
+            };
+        },
         computed: {
             ...mapState('app', {
                 color: state => state.color,
             })
         },
-        created(){
+        created() {
             //挂载ruleForm
             this.setRules();
-            this.handleLogin = this.throttle(this.handleLogin,360)
+            this.handleLogin = this.throttle(this.handleLogin,360);
         },
         mounted () {
             //登录页主题更改
@@ -80,29 +80,29 @@
         methods:{
             ...mapActions('user',['login']),
             //登录
-            handleLogin(){
+            handleLogin() {
                 this.loading = true;
                 this.LoginForm.validateFieldsAndScroll((err,values)=>{
-                    if(!err){
+                    if (!err) {
                         delete values.verification;
                         this.login(values).then(()=>{
                             this.loading = false;
                             this.$router.push({name:'Home'});
                         }).catch(err=>{
                             this.loading = false;
-                            this.$message.error(err.msg)
-                        })
-                    }else{
+                            this.$message.error(err.msg);
+                        });
+                    } else {
                         this.loading = false;
                     }
-                })
+                });
             },
             //获取验证类型
-            getRules(type){
-                return [type,this.ruleForm[type]]
+            getRules(type) {
+                return [type,this.ruleForm[type]];
             },
             //实例化所有验证类
-            setRules(){
+            setRules() {
                 this.ruleForm = {
                     username: {
                         initialValue: 'admin',
@@ -127,33 +127,33 @@
                     verification:{
                         initialValue:'',
                         validateFirst:true,
-                        normalize:vlaue => vlaue ? vlaue.toString().trim():null,
+                        normalize:vlaue => vlaue ? vlaue.toString().trim() : null,
                         rules:[
                             {required:true,whitespace:true,message:'请输入验证码'},
                             {validator:this.verificationValidator}
                         ] 
                     }
-                }
+                };
             },
             //密码验证规则
-            passwordValidator(rule,value,clallback){
+            passwordValidator(rule,value,clallback) {
                 const reg = /^(\w){6,20}$/;
                 const new_reg = new RegExp(reg);
-                if(!new_reg.test(value)){
-                    clallback('密码为6-20以内的字母、数字、下划线')
-                }else if(value===this.LoginForm.getFieldValue('username')){
+                if (!new_reg.test(value)) {
+                    clallback('密码为6-20以内的字母、数字、下划线');
+                } else if (value === this.LoginForm.getFieldValue('username')) {
                     this.focus_input = true;
-                    clallback('用户名不能和密码重复')
-                }else{
-                    clallback()
+                    clallback('用户名不能和密码重复');
+                } else {
+                    clallback();
                 }
             },
             //验证码验证规则
-            verificationValidator(rule,value,clallback){
-                if(value===this.verification_code.toLocaleLowerCase()||value===this.verification_code.toLocaleUpperCase()){
-                    clallback()
-                }else{
-                    clallback('验证码错误')
+            verificationValidator(rule,value,clallback) {
+                if (value === this.verification_code.toLocaleLowerCase() || value === this.verification_code.toLocaleUpperCase()) {
+                    clallback();
+                } else {
+                    clallback('验证码错误');
                 }
             },
         }

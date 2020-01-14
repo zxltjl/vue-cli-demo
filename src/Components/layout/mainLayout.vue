@@ -61,7 +61,7 @@
     import Menu from './layout_c/menu';
     import Tooltip from './layout_c/tooltip';
     import User from './layout_c/user';
-    import Tabs from './layout_c/tabs'
+    import Tabs from './layout_c/tabs';
 
 
     import ThemeSetting from './layout_c/themeSetting';
@@ -105,25 +105,25 @@
         },
         methods:{
             ...mapMutations('user',['setUserInfo','setToken']),
-            findOpenkeys(current,data){
+            findOpenkeys(current,data) {
                 data.forEach(item=>{
-                    if(item.children){
+                    if (item.children) {
                         item.children.forEach(item1=>{
-                            if(item1.name === current){
+                            if (item1.name === current) {
                                 this.openKeys.push(item.name);
                             }
-                            if(item1.children){
-                                this.findOpenkeys(this.$route.name,item1.children)
+                            if (item1.children) {
+                                this.findOpenkeys(this.$route.name,item1.children);
                             }
-                        })
+                        });
                     }
-                })
+                });
             },
             //获取路由表
-            loadMenu(){
-                const menuList = this.$router.options.routes.filter(item=>item.name==='Home')[0].children.sort((a,b)=>a.sort-b.sort);
-                if(Array.isArray(menuList)){
-                    this.menuData = menuList
+            loadMenu() {
+                const menuList = this.$router.options.routes.filter(item=>item.name === 'Home')[0].children.sort((a,b)=>a.sort - b.sort);
+                if (Array.isArray(menuList)) {
+                    this.menuData = menuList;
                 }
             },
             //主题设置切换按钮

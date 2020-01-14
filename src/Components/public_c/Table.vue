@@ -5,9 +5,10 @@
             :columns="slotColumns"
             :data-source="data.data"
             :bordered="isBordered"
-            :position="position"
-            :row-selection="rowSelection"
+            :pagination="pagination"
+            :row-selection="selectedKeys?rowSelection:null"
             :loading="loading"
+            @change="change"
             v-bind="$attrs"
             v-on="$listeners"
         >
@@ -27,7 +28,7 @@
 </template>
 
 <script>
-    const proxyColumns = (columns)=>{
+    const proxyColumns = columns=>{
         const _columns = columns.map(item => ({
             key: item.scopedSlots ? (item.key || item.dataIndex) : warn(item.key || item.dataIndex),
             fixed: item.fixed || false,
@@ -36,21 +37,23 @@
             ...item
         }));
         _columns.unshift({
-            title:"序号",
+            title:'序号',
             key:'index',
             dataIndex:'index',
+            align:'center',
+            width:64,
             scopedSlots:{
                 customRender:'index'
             }
-        })
+        });
         return _columns;
-    }
+    };
     const disabled_key = ['index','title'];
-    const warn = (key)=>{
-        if(disabled_key.includes(key)){
-            console.error(key+"is disabled，Please change to other")
+    const warn = key=>{
+        if (disabled_key.includes(key)) {
+            console.error(key + 'is disabled，Please change to other');
         }
-    }
+    };
     export default {
         props:{
             columns:{
@@ -60,103 +63,138 @@
             },
             data:{
                 type:Object,
-                default:()=>{}
+                default:()=>({
+                    meta:{total:0},
+                    data:[]
+                }),
+                require:true,
             },
             isBordered:{
                 type:Boolean,
                 default:false
             },
-        },
-        data(){
-            return {
-                loading:false,
-                position:{
-                    page:1,
-                    pageSize:10,
-                    showQuickJumper:true,
-                    showSizeChanger:true,
-                    showTotal:(total,range)=>{
-                        return "共"+total+"页"+range
-                    },
-                    total:this.data.meta.total,
-                    pageSizeOptions:['10','30','60','100']
-                },
-                selectedRowKeys:[],
+            pageParams:{
+                type:Object,
+                default:()=>({page:1,pageSize:30}),
+                require:true,
+            },
+            selectedKeys:{
+                type:[Boolean,Array],
+                default:()=>false
             }
         },
-        watch:{
-
+        data() {
+            return {
+                loading:false,
+                pagination:{
+                    current:1,
+                    showQuickJumper:true,
+                    showSizeChanger:true,
+                    showTotal:total=>'共' + total + '条',
+                    total:0,
+                    pageSizeOptions:['10','30','60','100'],
+                    ...this.pageParams
+                },
+                selectedRowKeys:[],
+            };
         },
         computed:{
-            slotColumns(){
-                return proxyColumns(this.columns)
+            slotColumns() {
+                return proxyColumns(this.columns);
             },
             rowSelection:{
-                get:(all)=>{
-                    return {
-                        selectedRowKeys:all.selectedRowKeys,
-                        onChange: all.onSelectChange,
-                        hideDefaultSelections: true,
-                        //扩展勾选的方法
-                        selections: [
-                            {
-                                key: 'all-data',
-                                text: '全选',
-                                onSelect: (val) => {
-                                    all.selectedRowKeys = val
-                                },
+                get:all=>({
+                    selectedRowKeys:all.selectedRowKeys,
+                    onChange: all.onSelectChange,
+                    hideDefaultSelections: true,
+                    //扩展勾选的方法
+                    selections: [
+                        {
+                            key: 'all-data',
+                            text: '全选',
+                            onSelect: val => {
+                                all.selectedRowKeys = val;
                             },
-                            {
-                                key: 'reverse-data',
-                                text: '反选',
-                                onSelect: (val) => {
-                                    let newRowKeys = [];
-                                    newRowKeys = val.filter(item=>!all.selectedRowKeys.includes(item))
-                                    all.selectedRowKeys = newRowKeys;
-                                },
+                        },
+                        {
+                            key: 'reverse-data',
+                            text: '反选',
+                            onSelect: val => {
+                                let newRowKeys = [];
+                                newRowKeys = val.filter(item=>!all.selectedRowKeys.includes(item));
+                                all.selectedRowKeys = newRowKeys;
                             },
-                            {
-                                key: 'odd-data',
-                                text: '奇数行',
-                                onSelect: (val) => {
-                                    let newRowKeys = [];
-                                    newRowKeys = val.filter((key, index) => {
-                                        if (index % 2 !== 0) {
-                                            return false;
-                                        }
-                                        return true;
-                                    });
-                                    all.selectedRowKeys = newRowKeys;
-                                },
+                        },
+                        {
+                            key: 'odd-data',
+                            text: '奇数行',
+                            onSelect: val => {
+                                let newRowKeys = [];
+                                newRowKeys = val.filter((key, index) => {
+                                    if (index % 2 !== 0) {
+                                        return false;
+                                    }
+                                    return true;
+                                });
+                                all.selectedRowKeys = newRowKeys;
                             },
-                            {
-                                key: 'even-data',
-                                text: '偶数行',
-                                onSelect: (val) => {
-                                    let newRowKeys = [];
-                                    newRowKeys = val.filter((key, index) => {
-                                        if (index % 2 === 0) {
-                                            return false;
-                                        }
-                                        return true;
-                                    });
-                                    all.selectedRowKeys = newRowKeys;
-                                },
+                        },
+                        {
+                            key: 'even-data',
+                            text: '偶数行',
+                            onSelect: val => {
+                                let newRowKeys = [];
+                                newRowKeys = val.filter((key, index) => {
+                                    if (index % 2 === 0) {
+                                        return false;
+                                    }
+                                    return true;
+                                });
+                                all.selectedRowKeys = newRowKeys;
                             },
-                        ],
-                    };
-                },
+                        },
+                    ],
+                }),
             },
         },
-        created(){
-            
+        watch:{
+            data:{
+                handler(newVal) {
+                    this.loadData(newVal);
+                },
+                deep:true
+            },
+        },
+        created() {
         },
         methods:{
-            onSelectChange(selectedRowKeys){
+            async loadData(data){
+                this.loading = true;
+                await this.dealData(data);
+                this.loading = false;
+
+            },
+            //表格数据处理
+            dealData(data) {
+                this.pagination.total = this.data.meta.total;
+                this.data.data.forEach((item,index) => {
+                    item.index = (index + 1) + (this.pagination.current - 1) * this.pagination.pageSize;
+                });
+                this.data = data;
+            },
+            //页码改变的回调
+            change(page) {
+                this.pagination.current = page.current;
+                this.pagination.pageSize = page.pageSize;
+                this.$emit('updateData',{...this.pageParams,page:page.current,pageSize:page.pageSize});
+            },
+            onSelectChange(selectedRowKeys) {
                 this.selectedRowKeys = selectedRowKeys;
+                //异步更新数据
+                this.$emit('update:selectedKeys',this.selectedRowKeys)
             },
         }
-    }
+    };
 </script>
 
 <style>

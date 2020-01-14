@@ -21,7 +21,7 @@
                     <a-menu-item :disabled="disabled" @click="closeCurrent">
                         关闭当前
                     </a-menu-item>
-                    <a-menu-item @click="closeAll">
+                    <a-menu-item :disabled="disabled" @click="closeAll">
                         关闭所有
                     </a-menu-item>
                 </a-menu>
@@ -36,22 +36,25 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
                 activeKey:'',//当前激活的tab
                 routerCache:[],//路由缓存数组
                 fullPathList:[],//path数组
                 disabled:false,//关闭当前
-            }
+            };
+        },
+        computed:{
+
         },
         watch: {
-            '$route': function (newVal) {
+            '$route' (newVal) {
                 let obj = {
                     name:'',
                     path:'',
                     title:'',
                     close:true
-                }
+                };
                 obj.name = newVal.name;
                 obj.path = newVal.path;
                 obj.title = newVal.meta.title;
@@ -61,24 +64,21 @@
                     this.fullPathList.push(newVal.fullPath);
                 }
             },
-            fullPathList:function(newVal){
-                if(newVal.length===1){
+            fullPathList(newVal) {
+                if (newVal.length === 1) {
                     this.disabled = true;
-                }else{
+                } else {
                     this.disabled = false;
                 }
             }
         },
-        computed:{
-
-        },
-        created(){
+        created() {
             let obj = {
                 name:'',
                 path:'',
                 title:'',
                 close:true
-            }
+            };
             obj.name = this.$route.name;
             obj.path = this.$route.path;
             obj.title = this.$route.meta.title;
@@ -88,57 +88,57 @@
         },
         methods:{
             //关闭当前标签
-            closeCurrent(){
-                const i = this.fullPathList.findIndex(value=>value===this.activeKey);
+            closeCurrent() {
+                const i = this.fullPathList.findIndex(value=>value === this.activeKey);
                 const len = this.fullPathList.length;
-                if(i<(len-1)){
-                    this.activeKey = this.fullPathList[(i+1)];
-                }else{
-                    this.activeKey = this.fullPathList[(i-1)];
+                if (i < (len - 1)) {
+                    this.activeKey = this.fullPathList[(i + 1)];
+                } else {
+                    this.activeKey = this.fullPathList[(i - 1)];
                 }
                 this.fullPathList.splice(i,1);
                 this.routerCache.splice(i,1);
                 this.$router.push({
                     path:this.activeKey
-                })
+                });
             },
             //关闭所有标签
-            closeAll(){
-                if(this.routerCache.length>1){
+            closeAll() {
+                if (this.routerCache.length > 1) {
                     this.fullPathList = [this.activeKey];
-                    this.routerCache = this.routerCache.filter(item=>item.path===this.activeKey); 
+                    this.routerCache = this.routerCache.filter(item=>item.path === this.activeKey); 
                 }
             },
             //点击tabs的回调
-            callback(val){
+            callback(val) {
                 this.$router.push({
                     path:val
-                })
+                });
             },
             //路由标签删除
-            edit(val,action){
-                const i = this.fullPathList.findIndex(value=>value===val);
+            edit(val,action) {
+                const i = this.fullPathList.findIndex(value=>value === val);
                 const len = this.fullPathList.length;
-                if(this.activeKey===val){
-                    if(i<(len-1)){
-                        this.activeKey = this.fullPathList[(i+1)];
-                    }else{
-                        this.activeKey = this.fullPathList[(i-1)];
+                if (this.activeKey === val) {
+                    if (i < (len - 1)) {
+                        this.activeKey = this.fullPathList[(i + 1)];
+                    } else {
+                        this.activeKey = this.fullPathList[(i - 1)];
                     }
                     this.fullPathList.splice(i,1);
                     this.routerCache.splice(i,1);
                     this.$router.push({
                         path:this.activeKey
-                    })
-                }else{
-                    if(action==='remove'){
+                    });
+                } else {
+                    if (action === 'remove') {
                         this.fullPathList.splice(i,1);
                         this.routerCache.splice(i,1);
                     }
                 }
             }
         }
-    }
+    };
 </script>
 
 <style lang="less" scoped> 

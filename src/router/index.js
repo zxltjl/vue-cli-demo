@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import db from '@/libs/db'
+import db from '@/libs/db';
 // import store from '../store';
 import NProgress from 'nprogress';
 import '../assets/style/nprocess.less';//引入自定义的nprocess样式
@@ -54,9 +54,9 @@ const isRouterAuth = function (to, from, next) {
 //第一次进入
 const isFirstEnter = async function (to, from, next) {
     if (!db.get('token')) {
-        if(to.name==='Login'){
+        if (to.name === 'Login') {
             next();
-        }else{
+        } else {
             return next({ name: 'Login' });
         }
     }
@@ -69,7 +69,7 @@ router.beforeEach(async (to, from, next) => {
     NProgress.start();
     if (!isRouterAuth(to,from,next)) return;
     if (!await isFirstEnter(to, from, next)) return;
-    next()
+    next();
     /* 必须调用 `next` */
 });
   
@@ -78,7 +78,7 @@ router.beforeResolve((to, from, next) => {
 /* 必须调用 `next` */
 });
 
-router.afterEach((to) => {
+router.afterEach(to => {
     Promise.resolve().then(() => {
         NProgress.done();
     });
