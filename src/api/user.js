@@ -19,14 +19,22 @@ const delUser = id=>server.request({
     url:'user/'+id,
     method:'delete',
 })
+//新增用于
 const addUser = data=>server.request({
     url:'user/add',
     method:'post',
+    data
+})
+//编辑用户
+const updateUser = (id,data)=>server.request({
+    url:'user/'+id,
+    method:'put',
     data
 })
 export {
     login,
     userList,
     delUser,
-    addUser
+    addUser,
+    updateUser
 };

@@ -11,10 +11,14 @@
             >
                 <a-tab-pane 
                     v-for="item in routerCache" 
-                    :tab="item.title" 
                     :key="item.path"
                     :closable="routerCache.length>1"
-                />
+                >
+                    <span slot="tab">
+                        <span class="dot" :style="{'background':activeKey===item.path?color:''}"></span>
+                        <span>{{ item.title }}</span>
+                    </span>
+                </a-tab-pane>
             </a-tabs>
             <a-dropdown class="dropdown">
                 <a-menu slot="overlay">
@@ -35,6 +39,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
     export default {
         data() {
             return {
@@ -45,7 +50,9 @@
             };
         },
         computed:{
-
+            ...mapState('app',{
+                color:state=>state.color
+            })
         },
         watch: {
             '$route' (newVal) {
@@ -145,24 +152,31 @@
     .tabs-box{
         height:auto;
         width:100%;
-        padding:10px;
+        padding:8px;
         .flex{
-            background:#fff;
             box-sizing:border-box;
             width:100%;
             display:flex;
             align-items:center;
-            padding:3px 10px;
             justify-content: space-between;
         }
     }
-    // .dropdown{
-        
-    // }
     /deep/.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-tab{
+        line-height:33px;
         margin:0;
     }
     /deep/.ant-tabs-bar{
         margin:0
+    }
+    /deep/.ant-tabs.ant-tabs-card .ant-tabs-card-bar .ant-tabs-nav-container{
+        height:35px;
+    }
+    .dot{
+        display:inline-block;
+        width:10px;
+        height:10px;
+        border-radius:50%;
+        background:#e8e8e8;
+        margin-right:10px;
     }
 </style>

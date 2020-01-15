@@ -1,6 +1,11 @@
 <template>
     <div>
-        <a-button type="primary" @click="addUser" class="alert-info">
+        <search @reset="reset" @search="search">
+            <a-form-item label="姓名">
+                <a-input v-model="params.name" placeholder="请输入用户名" />
+            </a-form-item>
+        </search>
+        <a-button type="primary" @click="addUser" class="margin">
             新增
         </a-button>
         <a-alert type="info" show-icon class="alert-info"> 
@@ -13,15 +18,14 @@
             size="small"
             :columns="columns" 
             :selected-keys.sync="selectedKeys"
-            :data="data" 
-            :page-params="params"
-            @updateData="load"
+            :is-reload.sync="isReload"
+            :data="loadData" 
         >
             <template #age="{value}">
                 <span style="color:red;font-size:24px;">{{ value }}</span>
             </template>
             <template #action="text">
-                <a-button type="primary" style="margin-right:20px;">编辑</a-button>
+                <a-button type="primary" class="margin" @click="edit(text.row)">编辑</a-button>
                 <a-popconfirm 
                     title="确认删除这条信息？" 
                     ok-text="确认" 
@@ -59,43 +63,44 @@
 
 <script>    
     import {columns} from './cloumns';
-    import {userList,delUser,addUser} from '@/api/user';
+    import {userList,delUser,addUser,updateUser} from '@/api/user';
     export default {
         data() {
             return {    
                 columns,
-                data:{},
+                isReload:false,
                 selectedKeys:[],
                 params:{
-                    page:1,
-                    pageSize:10,
-                    name:'dasd'
+                    name:undefined
                 },
                 form:this.$form.createForm(this),
                 visible:false,
                 formLayout:{
                     labelCol:{span:5},
                     wrapperCol:{span:12},
-                }
+                },
+                methodName:undefined,
+                edit_id:undefined
             };
         },
         created() {
             this.setRules()
-            this.load();
         },
         mounted(){
             
         },
         methods:{
-            load(val) {
-                userList(val ? val : this.params).then(res=>{
-                    this.data = res;
-                });
+            loadData(params) {
+                return new Promise(resolve=>{
+                    userList(Object.assign(params,this.params)).then(res=>{
+                        resolve(res)
+                    })
+                }) 
             },
             del(id){
                 delUser(id).then(()=>{
                     this.$message.success('删除成功')
-                    this.load(this.params)
+                    this.isReload = true;
                 }).catch(err=>{
                     if(err){
                         this.$message.error('删除失败')
@@ -103,6 +108,7 @@
                 })
             },
             addUser(){
+                this.methodName = 'add';
                 this.visible = true;
             },
             setRules(){
@@ -155,16 +161,49 @@
             submit(){
                 this.form.validateFieldsAndScroll((err,values)=>{
                     if(!err){
-                        addUser(values).then(()=>{
-                            this.$message.success('新增成功');
-                            this.load(this.params)
-                        }).catch(err=>{
-                            if(err){
-                                this.$message.error('新增失败')
-                            }
-                        })
+                        if(this.methodName==='add'){
+                            addUser(values).then(()=>{
+                                this.$message.success('新增成功');
+                                this.isReload = true;
+                                this.visible = false;
+                            }).catch(err=>{
+                                if(err){
+                                    this.$message.error('新增失败')
+                                }
+                            })
+                        }else{
+                            updateUser(this.edit_id,values).then(()=>{
+                                this.$message.success('编辑成功');
+                                this.isReload = true;
+                                this.visible = false;
+                            }).catch(err=>{
+                                if(err){
+                                    this.$message.error('编辑失败')
+                                }
+                            })
+                        }
                     }
                 })
+            },
+            edit(val){
+                this.methodName = 'edit';
+                this.visible = true;
+                this.edit_id = val.id;
+                setTimeout(() => {
+                    this.form.setFieldsValue({
+                        username:val.username,
+                        phone:val.phone,
+                        address:val.address,
+                        email:val.email
+                    })
+                }, 0);
+            },
+            search(){
+                this.isReload = true;
+            },
+            reset(){
+                this.params.name = undefined;
+                this.isReload = true;
             }
             
         }
@@ -173,6 +212,9 @@
 
 <style lang="less" scoped>
     .alert-info{
-        margin-bottom:10px;
+        margin:15px 0;
+    }
+    .margin{
+        margin:0 10px;
     }
 </style>

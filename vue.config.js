@@ -3,13 +3,7 @@ const resolveDir = function (dir) {
     return path.join(__dirname,dir);
 };
 const webpack = require('webpack');
-const ThemeColorReplacer = require('webpack-theme-color-replacer');
-function getAntdSerials (color) {
-    let lightens = new Array(9).fill().map((t, i) => ThemeColorReplacer.varyColor.lighten(color, i / 10));
-    let darkens = new Array(6).fill().map((t, i) => ThemeColorReplacer.varyColor.darken(color, i / 10));
-    return lightens.concat(darkens);
-}
-
+const createThemeColorReplacerPlugin = require('./src/config/plugin.config')
 // 复制 tinymce 所需的静态资源
 const copyOptions = [
     {
@@ -24,7 +18,7 @@ const copyOptions = [
 module.exports = {
     // baseUrl: process.env.NODE_ENV === 'production' ? '/development/' : '/',
     publicPath:'./',
-    outputDir:'demo',
+    outputDir:'dist',
     productionSourceMap: false,
     devServer: {
         port:8888,
@@ -62,11 +56,7 @@ module.exports = {
         // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             // 生成仅包含颜色的替换样式（主题色等）
-            new ThemeColorReplacer({
-                fileName: './css/theme-colors.css',
-                matchColors: getAntdSerials('#1890ff') // 主色系列
-            }),
-
+            createThemeColorReplacerPlugin()
         ]
     },
     transpileDependencies: [],

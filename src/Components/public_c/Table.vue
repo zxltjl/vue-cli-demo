@@ -3,7 +3,7 @@
         <a-table 
             :row-key="record=>record.id"
             :columns="slotColumns"
-            :data-source="data.data"
+            :data-source="dataSource"
             :bordered="isBordered"
             :pagination="pagination"
             :row-selection="selectedKeys?rowSelection:null"
@@ -56,35 +56,45 @@
     };
     export default {
         props:{
+            //表格title
             columns:{
                 type:Array,
                 default:()=>[],
                 require:true
             },
+            //promise对象
             data:{
-                type:Object,
-                default:()=>({
-                    meta:{total:0},
-                    data:[]
-                }),
+                type:Function,
                 require:true,
             },
+            //表格是否有边框
             isBordered:{
                 type:Boolean,
                 default:false
             },
-            pageParams:{
-                type:Object,
-                default:()=>({page:1,pageSize:30}),
-                require:true,
+            //手动分页page
+            page:{
+                type:[Number,String],
+                default:1||'1'
             },
+            //手动分页pageSize
+            pageSize:{
+                type:[Number,String],
+                default:10||'10'
+            },
+            //勾选的数据
             selectedKeys:{
                 type:[Boolean,Array],
                 default:()=>false
+            },
+            isReload:{
+                type:Boolean,
+                default:false
             }
         },
         data() {
             return {
+                //分页
                 loading:false,
                 pagination:{
                     current:1,
@@ -93,15 +103,17 @@
                     showTotal:total=>'共' + total + '条',
                     total:0,
                     pageSizeOptions:['10','30','60','100'],
-                    ...this.pageParams
                 },
-                selectedRowKeys:[],
+                selectedRowKeys:[],//勾选的数组
+                dataSource:[],//表格数据源
             };
         },
         computed:{
+            //插槽
             slotColumns() {
                 return proxyColumns(this.columns);
             },
+            //勾选数据扩展功能
             rowSelection:{
                 get:all=>({
                     selectedRowKeys:all.selectedRowKeys,
@@ -113,7 +125,7 @@
                             key: 'all-data',
                             text: '全选',
                             onSelect: val => {
-                                all.selectedRowKeys = val;
+                                all.onSelectChange(val)
                             },
                         },
                         {
@@ -122,7 +134,7 @@
                             onSelect: val => {
                                 let newRowKeys = [];
                                 newRowKeys = val.filter(item=>!all.selectedRowKeys.includes(item));
-                                all.selectedRowKeys = newRowKeys;
+                                all.onSelectChange(newRowKeys)
                             },
                         },
                         {
@@ -136,7 +148,7 @@
                                     }
                                     return true;
                                 });
-                                all.selectedRowKeys = newRowKeys;
+                                all.onSelectChange(newRowKeys)
                             },
                         },
                         {
@@ -150,7 +162,7 @@
                                     }
                                     return true;
                                 });
-                                all.selectedRowKeys = newRowKeys;
+                                all.onSelectChange(newRowKeys)
                             },
                         },
                     ],
@@ -158,36 +170,55 @@
             },
         },
         watch:{
-            data:{
-                handler(newVal) {
-                    this.loadData(newVal);
-                },
-                deep:true
+            pageNum(val){
+                Object.assign(this.pagination,{page:val})
             },
+            pageSize(val){
+                Object.assign(this.pagination,{pageSize:val})
+            },
+            isReload(val){
+                if(val){
+                    this.loadData();
+                    this.$emit('update:isReload',false)
+                }
+            }
         },
         created() {
+            
+        },
+        mounted(){
+            this.loadData()
         },
         methods:{
-            async loadData(data){
+            loadData(){
                 this.loading = true;
-                await this.dealData(data);
-                this.loading = false;
-
-            },
-            //表格数据处理
-            dealData(data) {
-                this.pagination.total = this.data.meta.total;
-                this.data.data.forEach((item,index) => {
-                    item.index = (index + 1) + (this.pagination.current - 1) * this.pagination.pageSize;
-                });
-                this.data = data;
+                let params={
+                    page:this.pagination.page||this.pagination.current||this.page||1,
+                    pageSize:this.pagination.pageSize||this.pageSize||10
+                }
+                const load_fun = this.data(params);
+                load_fun.then(res=>{
+                    this.loading = false;
+                    if(res.data.length===0&&res.meta.total!==0){
+                        this.pagination.current--;
+                        this.pagination.page--;
+                        this.loadData()
+                    }
+                    this.pagination.total = res.meta.total;
+                    res.data.forEach((item,index) => {
+                        item.index = (index + 1) + (params.page - 1) * params.pageSize;
+                    });
+                    this.dataSource = res.data;
+                })
             },
             //页码改变的回调
             change(page) {
                 this.pagination.current = page.current;
                 this.pagination.pageSize = page.pageSize;
-                this.$emit('updateData',{...this.pageParams,page:page.current,pageSize:page.pageSize});
+                this.pagination.page = page.current;
+                this.loadData()
             },
+            //勾选函数
             onSelectChange(selectedRowKeys) {
                 this.selectedRowKeys = selectedRowKeys;
                 //异步更新数据

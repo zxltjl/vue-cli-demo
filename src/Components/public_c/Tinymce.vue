@@ -107,8 +107,8 @@
         },
         watch:{
             value:{
-                handler(newVal) {
-                    console.log(newVal);
+                handler() {
+                    
                 }
             }
         },
