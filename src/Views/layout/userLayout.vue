@@ -20,9 +20,9 @@
                 </AFormItem>
                 <AFormItem class="verification-box">
                     <AInput v-decorator="getRules('verification')" placeholder="请输入验证码" />
-                    <div>
-                        <valid class="validCode" :value.sync="verification_code" />
-                    </div>
+                    <span>
+                        <valid class="validCode" ref="valid" :value.sync="verification_code" />
+                    </span>
                 </AFormItem>
                 <AFormItem>
                     <AButton type="primary" :loading="loading" html-type="submit" class="login-btn">
@@ -36,8 +36,8 @@
 
 <script>
     import { mapState,mapActions } from 'vuex';
-    import {updateThemes} from './layout_c/change';
-    import valid from '../public_c/verification';
+    import {updateThemes} from './Components/change';
+    import valid from '@/Components/Others/verification';
     export default {    
         components:{
             valid
@@ -89,6 +89,7 @@
                             this.loading = false;
                             this.$router.push({name:'Home'});
                         }).catch(err=>{
+                            this.$refs.valid.refreshCode();//调用子组件的刷新验证码方法
                             this.loading = false;
                             this.$message.error(err.msg);
                         });

@@ -1,4 +1,4 @@
-import RouterView from '@/Components/layout/RouterView';
+import RouterView from '@/Components/RouterBox/RouterView';
 export default [
     {
         sort:3,
@@ -18,7 +18,7 @@ export default [
                 meta:{
                     title:'表格'
                 },
-                component:()=>import('@/Views/PublicComponents/Table/Index.vue'),
+                component:()=>import('@/Views/Pages/PublicComponents/Table/Index.vue'),
             },
             {
                 path:'public-component-search',
@@ -26,7 +26,7 @@ export default [
                 meta:{
                     title:'搜索'
                 },
-                component:()=>import('@/Views/PublicComponents/Search/Index.vue'),
+                component:()=>import('@/Views/Pages/PublicComponents/Search/Index.vue'),
             },
         ]
     }

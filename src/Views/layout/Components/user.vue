@@ -3,8 +3,8 @@
         <div
             class="avatar v-icon-hover"
         >
-            <a-avatar size="large" icon="user" />
-            <span>{{ userInfo.username }}</span>
+            <a-avatar size="large" :style="{'backgroundColor':color}" icon="user" />
+            <a class="ant-dropdown-link username">{{ userInfo.username }}</a>
         </div>
         <a-menu slot="overlay">
             <a-menu-item class="drop-item">
@@ -27,7 +27,8 @@
             };
         },
         computed:{
-            ...mapState('user',['userInfo'])
+            ...mapState('user',['userInfo']),
+            ...mapState('app',['color'])
         },
         created() {
         },
@@ -48,5 +49,8 @@
     }
     .drop-item{
         text-align:center;
+    }
+    .username{
+        padding-left:5px;
     }
 </style>

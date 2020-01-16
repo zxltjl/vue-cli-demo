@@ -6,6 +6,6 @@ export default [
         meta:{
             title:'富文本编辑器'
         },
-        component:()=>import('@/Views/Editor/Index.vue')
+        component:()=>import('@/Views/Pages/Editor/Index.vue')
     }
 ];

@@ -8,7 +8,7 @@
     import Tinymce from 'tinymce/tinymce';
     import 'tinymce/themes/silver';
     import 'tinymce/skins/ui/oxide/skin.min.css';
-    import '../static/langs/zh_CN.js';
+    import '@/statics/langs/zh_CN.js';
 
 
     //plugin

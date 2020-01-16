@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import WangEditor from '@/Components/public_c/WangEditor.vue';
-    import tinymce from '@/Components/public_c/Tinymce.vue';
+    import WangEditor from '@/Components/WangEditor/Index.vue';
+    import tinymce from '@/Components/Tinymce/Index.vue';
     export default {
         components:{
             WangEditor,

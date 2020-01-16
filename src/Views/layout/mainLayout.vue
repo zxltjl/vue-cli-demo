@@ -1,6 +1,6 @@
 <template>
     <div id="basic-layout">
-        <ThemeSetting
+        <Setting
             :visible="visible"
             @change="change"
         />
@@ -24,7 +24,7 @@
             </ALayoutSider>
             <ALayout>
                 <ALayoutHeader class="basic-header">
-                    <div class="inline-block" @click="collapsed = !collapsed">
+                    <div class="inline-block" style="cursor:pointer;" @click="collapsed = !collapsed">
                         <AIcon
                             class="trigger"
                             :type="collapsed ? 'menu-unfold' : 'menu-fold'"
@@ -57,14 +57,14 @@
 </template>
 
 <script>
-    import Logo from './layout_c/Logo';
-    import Menu from './layout_c/menu';
-    import Tooltip from './layout_c/tooltip';
-    import User from './layout_c/user';
-    import Tabs from './layout_c/tabs';
+    import Logo from './Components/Logo';
+    import Menu from './Components/menu';
+    import Tooltip from './Components/tooltip';
+    import User from './Components/user';
+    import Tabs from './Components/tabs';
 
 
-    import ThemeSetting from './layout_c/themeSetting';
+    import Setting from './Components/Setting';
     import {mapState,mapMutations} from 'vuex';
     import db from '@/libs/db';
     export default {
@@ -72,7 +72,7 @@
             Logo,
             Menu,
             Tooltip,
-            ThemeSetting,
+            Setting,
             Tabs,
             User
         },

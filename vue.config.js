@@ -7,11 +7,11 @@ const createThemeColorReplacerPlugin = require('./src/config/plugin.config')
 // 复制 tinymce 所需的静态资源
 const copyOptions = [
     {
-        from: resolveDir('./src/Components/static/langs'),
+        from: resolveDir('./src/statics/langs'),
         to: './editor/langs'
     },
     {
-        from: resolveDir('./src/Components/static/skins'),
+        from: resolveDir('./src/statics/skins'),
         to: './editor/skins'
     }
 ];

@@ -18,7 +18,6 @@
         height: 100%;
         padding: 0 12px;
         cursor: pointer;
-
         &-icon {
             font-size: 16px;
             vertical-align: -.2rem;

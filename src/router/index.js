@@ -28,7 +28,7 @@ const router = new VueRouter({
                 title:'首页'
             },
             redirect:{name:'Index'},
-            component: ()=>import('@/Components/layout/mainLayout.vue'),
+            component: ()=>import('@/Views/layout/mainLayout.vue'),
             children:loadRoutes()
         },
         {
@@ -40,7 +40,7 @@ const router = new VueRouter({
                 notCache: true
             },
             
-            component:()=>import('@/Components/layout/userLayout.vue')
+            component:()=>import('@/Views/layout/userLayout.vue')
         },
     ]
 });
