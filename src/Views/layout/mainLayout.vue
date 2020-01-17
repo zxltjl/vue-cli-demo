@@ -58,10 +58,10 @@
 
 <script>
     import Logo from './Components/Logo';
-    import Menu from './Components/menu';
-    import Tooltip from './Components/tooltip';
-    import User from './Components/user';
-    import Tabs from './Components/tabs';
+    import Menu from './Components/Menu';
+    import Tooltip from './Components/Tooltip';
+    import User from './Components/User';
+    import Tabs from './Components/Tabs';
 
 
     import Setting from './Components/Setting';

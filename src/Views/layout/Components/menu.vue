@@ -8,7 +8,7 @@
                 v-if="!item.children"
                 :key="item.name||index"
             >
-                <AIcon type="user" />
+                <MySvg :type="'Home'" />
                 <span>{{ item.meta.title }}</span>
             </AMenuItem> 
             <ASubMenu
@@ -16,7 +16,7 @@
                 :key="item.name||index"
             >
                 <span slot="title">
-                    <a-icon type="user" />
+                    <MySvg :type="'Home'" />
                     <span>{{ item.meta.title }}</span>
                 </span>
                 <template v-for="(item1,index1) in item.children">
@@ -24,7 +24,6 @@
                         v-if="!item1.children"
                         :key="item1.name||index1"
                     >
-                        <AIcon type="user" />
                         <span>{{ item1.meta.title }}</span>
                     </AMenuItem> 
                     <ASubMenu
@@ -32,7 +31,6 @@
                         :key="item1.name||index1"
                     >
                         <span slot="title">
-                            <a-icon type="user" />
                             <span>{{ item1.meta.title }}</span>
                         </span>
                         <AMenuItem
@@ -49,7 +47,11 @@
 </template>
 
 <script>
+    import MySvg from './Svg'
     export default {
+        components:{
+            MySvg
+        },
         props:{
             menuData:{
                 type:Array,

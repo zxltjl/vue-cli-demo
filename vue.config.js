@@ -20,6 +20,7 @@ module.exports = {
     publicPath:'./',
     outputDir:'dist',
     productionSourceMap: false,
+    runtimeCompiler: true,//模板编译可以使用template
     devServer: {
         port:8888,
         open:true

@@ -1,5 +1,6 @@
 <template>
     <div>
+        <a-button type="primary" @click="ex" style="margin-bottom:10px;">导出</a-button>
         <a-table 
             :row-key="record=>record.id"
             :columns="slotColumns"
@@ -28,7 +29,9 @@
 </template>
 
 <script>
-    const proxyColumns = columns=>{
+    import ExportExcel from './xlsx';
+    //给每个column添加scopedSlots
+    const proxyColumns = (columns,isNumber)=>{
         const _columns = columns.map(item => ({
             key: item.scopedSlots ? (item.key || item.dataIndex) : warn(item.key || item.dataIndex),
             fixed: item.fixed || false,
@@ -36,16 +39,19 @@
             scopedSlots: { customRender: item.dataIndex || item.key },
             ...item
         }));
-        _columns.unshift({
-            title:'序号',
-            key:'index',
-            dataIndex:'index',
-            align:'center',
-            width:64,
-            scopedSlots:{
-                customRender:'index'
-            }
-        });
+        //第一列加入序号
+        if(isNumber){
+            _columns.unshift({
+                title:'序号',
+                key:'index',
+                dataIndex:'index',
+                align:'center',
+                width:64,
+                scopedSlots:{
+                    customRender:'index'
+                }
+            });
+        }
         return _columns;
     };
     const disabled_key = ['index','title'];
@@ -72,6 +78,11 @@
                 type:Boolean,
                 default:false
             },
+            //是否有序号
+            isNumber:{
+                type:Boolean,
+                default:false
+            },
             //手动分页page
             page:{
                 type:[Number,String],
@@ -87,6 +98,7 @@
                 type:[Boolean,Array],
                 default:()=>false
             },
+            //异步刷新
             isReload:{
                 type:Boolean,
                 default:false
@@ -111,7 +123,7 @@
         computed:{
             //插槽
             slotColumns() {
-                return proxyColumns(this.columns);
+                return proxyColumns(this.columns,this.isNumber);
             },
             //勾选数据扩展功能
             rowSelection:{
@@ -184,7 +196,6 @@
             }
         },
         created() {
-            
         },
         mounted(){
             this.loadData()
@@ -209,6 +220,13 @@
                         item.index = (index + 1) + (params.page - 1) * params.pageSize;
                     });
                     this.dataSource = res.data;
+                }).catch(err=>{
+                    if(err){
+                        if(err==='请求超时'){
+                            this.$message.error(err)
+                        }
+                        this.loading = false;
+                    }
                 })
             },
             //页码改变的回调
@@ -224,6 +242,16 @@
                 //异步更新数据
                 this.$emit('update:selectedKeys',this.selectedRowKeys)
             },
+            //前端导出表格数据xlxs
+            ex(){
+                let arr = this.dataSource.filter(item=>this.selectedRowKeys.includes(item.id));
+                let _columns = this.columns.filter(item=>item.title!='操作')
+                if(arr.length===0){
+                    this.$message.warning('请勾选需要导出的选项');
+                    return;
+                }
+                ExportExcel(_columns, arr, `${new Date().getTime().toString()}_导出.xlsx`);
+            }
         }
     };
 </script>

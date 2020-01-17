@@ -20,6 +20,7 @@
             :selected-keys.sync="selectedKeys"
             :is-reload.sync="isReload"
             :data="loadData" 
+            is-number
         >
             <template #age="{value}">
                 <span style="color:red;font-size:24px;">{{ value }}</span>
@@ -91,9 +92,11 @@
         },
         methods:{
             loadData(params) {
-                return new Promise(resolve=>{
+                return new Promise((resolve,reject)=>{
                     userList(Object.assign(params,this.params)).then(res=>{
                         resolve(res)
+                    }).catch(err=>{
+                        reject(err)
                     })
                 }) 
             },
@@ -204,7 +207,7 @@
             reset(){
                 this.params.name = undefined;
                 this.isReload = true;
-            }
+            },
             
         }
     };

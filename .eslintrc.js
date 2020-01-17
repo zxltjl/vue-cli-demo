@@ -66,6 +66,8 @@ module.exports = {
         'vue/object-curly-spacing': 'warning',
         'vue/space-infix-ops': 'warning',
         'vue/space-unary-ops': 'warning',
+        //关闭定义变量未使用提示/报错
+        'no-unused-vars':0
     },
     overrides: [
         {

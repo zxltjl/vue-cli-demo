@@ -58,8 +58,9 @@ class AxiosRequest {
             return data.data;   //只有return data后才能完成响应
         },error=>{
             //请求错误时做些事
-            if (error.constructor.name === 'Cancel') {
-                return Promise.reject(error);
+            const { config, code, message } = error;
+            if (code === 'ECONNABORTED' || message === 'Network Error') { // 请求超时
+                return Promise.reject('请求超时');
             }
             return AxiosRequest.handleError(error);
         });
