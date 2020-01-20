@@ -14,9 +14,7 @@
     import Tinymce from 'tinymce/tinymce';
     import Editor from '@tinymce/tinymce-vue'
     import 'tinymce/themes/silver';
-    import 'tinymce/skins/ui/oxide/skin.min.css';
-    // import 'tinymce/skins/ui/oxide-dark/skin.min.css';
-    import '@/statics/langs/zh_CN.js';
+ 
 
     //plugin
     import 'tinymce/plugins/image';
@@ -64,7 +62,11 @@
             return {
                 disabled:false,
                 init:{
+                    baseUrl:'./tinymce',
+                    suffix:'.min',
+                    language_url: '/tinymce/langs/zh_CN.js',
                     language: 'zh_CN',
+                    skin_url: '/tinymce/skins/ui/oxide-dark',
                     plugins: [
                         'paste lists advlist nonbreaking table autolink autosave link image imagetools charmap print preview anchor searchreplace code pagebreak insertdatetime wordcount fullscreen'
                     ],
