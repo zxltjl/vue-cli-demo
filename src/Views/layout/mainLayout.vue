@@ -1,12 +1,12 @@
 <template>
-    <div id="basic-layout">
+    <div :class="!isFixedHeader&&layout==='horizontal'?'basic':'basic-layout'">
         <Setting
             :visible="visible"
             @change="change"
         />
-        <ALayout class="layout-box">
+        <ALayout :class="isFixedSilder?'layout-box':''">
             <ALayoutSider
-                class="layout-sider"
+                v-if="layout==='vertical'"
                 :trigger="null"
                 collapsible
                 v-model="collapsed"
@@ -23,33 +23,42 @@
                 />
             </ALayoutSider>
             <ALayout>
-                <ALayoutHeader class="basic-header">
-                    <div class="inline-block" style="cursor:pointer;" @click="collapsed = !collapsed">
+                <ALayoutHeader 
+                    :class="layout==='horizontal'?(theme==='dark'?'basic-header dark-color':'basic-header light-color'):'basic-header'"
+                >
+                    <div 
+                        v-if="layout==='vertical'" 
+                        class="inline-block" 
+                        style="cursor:pointer;" 
+                        @click="collapsed = !collapsed"
+                    >
                         <AIcon
                             class="trigger"
                             :type="collapsed ? 'menu-unfold' : 'menu-fold'"
                         />
                     </div>
-                    <!-- <Menu 
+                    <Logo v-if="layout==='horizontal'" class="horizontal-logo" />
+                    <Menu 
+                        v-if="layout==='horizontal'"
                         :menu-data="menuData" 
                         mode="horizontal"
                         :theme="theme"
                         :selected-keys="currentName"
                         :open-keys.sync="openKeys"
                         @select="menuSelect"
-                    /> -->
+                        class="horizontal-inline dark-color"
+                    />
                     <div class="tools">
                         <Tooltip @click="toggleDraw" />
                         <User />
                     </div>
                 </ALayoutHeader>
-                <Tabs />
-                <ALayoutContent
-                    class="basic-content"
-                >
+                <ALayoutContent :class="isFixedHeader?'basic-content':'basic-contents'">
+                    <Tabs v-if="isTabs" />
                     <keep-alive>
-                        <RouterView />
+                        <RouterView class="router-box" />
                     </keep-alive>
+                    <!-- <RouterView v-if="!$route.meta.keepAlive" class="router-box" /> -->
                 </ALayoutContent>
             </ALayout>
         </ALayout>
@@ -87,7 +96,12 @@
         },
         computed:{
             ...mapState('app',{
-                theme:state=>state.theme
+                theme:state=>state.theme,
+                isFixedSilder:state=>state.isFixedSilder,
+                isFixedHeader:state=>state.isFixedHeader,
+                layout:state=>state.layout,
+                isTabs:state=>state.isTabs
+
             })
         },
         watch:{
@@ -102,6 +116,14 @@
             this.setToken(db.get('token'));
             this.loadMenu();
             this.findOpenkeys(this.$route.name,this.menuData);
+            if(document.body.clientWidth<1200){
+                this.collapsed = true;
+            }else{
+                this.collapsed = false;
+            }
+        },
+        mounted(){
+            this.wOnresize()
         },
         methods:{
             ...mapMutations('user',['setUserInfo','setToken']),
@@ -140,28 +162,39 @@
                     });
                 }
             },
+            wOnresize(){
+                window.onresize=()=>{
+                    if(document.body.clientWidth<1200){
+                        this.collapsed = true;
+                    }else{
+                        this.collapsed = false;
+                    }
+                }
+            }
         }
     };
 </script>
 
 <style lang="less" scoped>
-    #basic-layout{
+    .basic-layout{
         height:100%;
         width:100%;
+    }
+    .basic{
+        width:100%;
+        height:auto;
     }
     .layout-box{
         height:100%;
         width:100%;
     }
-    .layout-sider{
-        height:100%;
-        overflow:auto;
-    }
     .basic-content{
         margin:5px 10px;
-        padding:20px;
-        background:#fff;
         overflow:auto;
+    }
+    .basic-contents{
+        margin:5px 10px;
+        position:relative;
     }
     /deep/.basic-header{
         padding:0 20px;
@@ -169,5 +202,29 @@
     }
     .tools{
         float:right
+    }
+    .horizontal-inline{
+        display:inline-block;
+    }
+    .horizontal-logo{
+        display:inline-block;
+        width:auto;
+        padding-right:20px;
+    }
+    .dark-color{
+        background:#001529;
+        color:rgba(255,255,255,0.65)!important;
+    }
+    .light-color{
+        background:#fff;
+        color:#000!important;
+    }
+    .router-box{
+        padding:20px;
+        background:#fff;
+        margin:0 10px;
+    }
+    /deep/.ant-menu-dark .ant-menu-item-selected{
+        color:#fff;
     }
 </style>

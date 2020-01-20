@@ -3,34 +3,25 @@
     <div>
         <ARow>
             <ACol span="24">
-                <h3>wangEditor</h3>
-                <WangEditor
-                    :value="value"
-                    :prefix-cls="'ant-editor-wang'"
-                />
-            </ACol>
-        </Arow>
-        <ARow>
-            <ACol span="24">
                 <h3>tinymce</h3>
-                <tinymce v-model="value" />
+                <tinymce v-model="value" :theme="'light'" />
             </ACol>
         </Arow>
     </div>
 </template>
 
 <script>
-    import WangEditor from '@/Components/WangEditor/Index.vue';
     import tinymce from '@/Components/Tinymce/Index.vue';
     export default {
         components:{
-            WangEditor,
             tinymce
         },
         data() {
             return {
-                value:'大声道'
+                value:'<p>tinymce</p>'
             };
+        },
+        created(){
         }
     };
 </script>

@@ -57,16 +57,16 @@
                 导航菜单风格
             </h3>
             <div class="flex">
-                <a-tooltip title="暗色" @click="ToggleState({theme:'dark'})">
+                <a-tooltip title="垂直菜单" @click="ToggleState({layout:'vertical'})">
                     <div class="setting-layout">
                         <VerticalSvg v-once />
-                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='dark'" />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="layout==='vertical'" />
                     </div>
                 </a-tooltip>
-                <a-tooltip title="亮色" @click="ToggleState({theme:'light'})">
+                <a-tooltip title="水平菜单" @click="ToggleState({layout:'horizontal'})">
                     <div class="setting-layout">
                         <HorizontalSvg v-once />
-                        <a-icon class="check-icon v-theme-color" type="check" v-if="theme==='light'" />
+                        <a-icon class="check-icon v-theme-color" type="check" v-if="layout==='horizontal'" />
                     </div>
                 </a-tooltip>
             </div>
@@ -85,6 +85,45 @@
                 <a-switch
                     class="demo-vertical"
                     @change="switchChange"
+                />
+            </div>
+            <div class="flex">
+                <span
+                    class="demo-vertical"
+                    style="margin-right:20px;"
+                >
+                    固定左侧菜单栏
+                </span>
+                <a-switch
+                    :checked="isFixedSilder"
+                    class="demo-vertical"
+                    @change="silderChange"
+                />
+            </div>
+            <div class="flex">
+                <span
+                    class="demo-vertical"
+                    style="margin-right:20px;"
+                >
+                    固定header
+                </span>
+                <a-switch
+                    :checked="isFixedHeader"
+                    class="demo-vertical"
+                    @change="headerChange"
+                />
+            </div>
+            <div class="flex">
+                <span
+                    class="demo-vertical"
+                    style="margin-right:20px;"
+                >
+                    多标签模式
+                </span>
+                <a-switch
+                    :checked="isTabs"
+                    class="demo-vertical"
+                    @change="tabsChange"
                 />
             </div>
         </div>
@@ -147,8 +186,19 @@
         computed: {
             ...mapState('app', {
                 color: state => state.color,
-                theme: state => state.theme
-            })
+                theme: state => state.theme,
+                isFixedHeader: state=>state.isFixedHeader,
+                isFixedSilder: state=>state.isFixedSilder,
+                layout: state=>state.layout,
+            }),
+            isTabs:{
+                get:function(){
+                    return this.$store.state.app.isTabs
+                },
+                set:function(newVal){
+                    this.$store.state.app.isTabs = newVal
+                }
+            }
         },
         created () {
         },
@@ -166,6 +216,15 @@
             },
             onClose () {
                 this.$emit('change', false);
+            },
+            silderChange(val){
+                this.ToggleState({isFixedSilder:val});
+            },
+            headerChange(val){
+                this.ToggleState({isFixedHeader:val});
+            },
+            tabsChange(val){
+                this.ToggleState({isTabs:val});
             }
         }
     };
@@ -176,13 +235,15 @@
     margin-bottom:25px; 
 }
 .flex{
+    padding:0 10px;
     display:flex;
-    justify-content:space-around;
+    justify-content:space-between;
     margin:10px 0;
 }
 .setting-layout{
     position:relative;
     display:inline-block;
+    cursor:pointer;
 }
 .check-icon{
     position:absolute;
