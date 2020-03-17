@@ -89,6 +89,7 @@
                             this.loading = false;
                             this.$router.push({name:'Home'});
                         }).catch(err=>{
+                            console.log(err)
                             this.$refs.valid.refreshCode();//调用子组件的刷新验证码方法
                             this.loading = false;
                             this.$message.error(err.msg);

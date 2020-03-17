@@ -1,6 +1,6 @@
 <template>
     <div>
-        <a-button type="primary" @click="ex" style="margin-bottom:10px;">导出</a-button>
+        <a-button v-if="isExport" type="primary" @click="ex" style="margin-bottom:10px;">导出</a-button>
         <a-table 
             :row-key="record=>record.id"
             :columns="slotColumns"
@@ -102,6 +102,15 @@
             isReload:{
                 type:Boolean,
                 default:false
+            },
+            //是否手动导出
+            isExport:{
+                type:Boolean,
+                default:false
+            },
+            //自定义修改数据需要
+            handlerData:{
+                type:Function,
             }
         },
         data() {
@@ -208,6 +217,11 @@
                     pageSize:this.pagination.pageSize||this.pageSize||10
                 }
                 const load_fun = this.data(params);
+                if(typeof load_fun !== 'object'){
+                    this.loading = false;
+                    this.dataSource = [];
+                    return;
+                }
                 load_fun.then(res=>{
                     this.loading = false;
                     if(res.data.length===0&&res.meta.total!==0){
@@ -219,9 +233,14 @@
                     res.data.forEach((item,index) => {
                         item.index = (index + 1) + (params.page - 1) * params.pageSize;
                     });
-                    this.dataSource = res.data;
+                    if(typeof this.handlerData==='function'){
+                        this.dataSource = this.handlerData(res.data)
+                    }else{
+                        this.dataSource = res.data;
+                    }
                 }).catch(err=>{
                     if(err){
+                        this.dataSource = [];
                         if(err==='请求超时'){
                             this.$message.error(err)
                         }

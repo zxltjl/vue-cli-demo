@@ -24,6 +24,7 @@ export default {
                     commit('setToken',res.data.token.value);
                     resolve();
                 }).catch(err=>{
+                    console.log(err)
                     reject(err);
                 });
             });

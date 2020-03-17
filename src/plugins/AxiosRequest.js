@@ -31,8 +31,9 @@ class AxiosRequest {
     static handleError(ctx) {
         try {
             const error = ctx.response;
-            const failedStatus = this.statusCode.get(error.status);
-            return Promise.reject(failedStatus);
+            // const failedStatus = this.statusCode.get(error.status);
+            // console.log(error)
+            return Promise.reject(error.data);
         } catch {
             throw new Error(ctx);
         }
@@ -60,7 +61,7 @@ class AxiosRequest {
             //请求错误时做些事
             const { config, code, message } = error;
             if (code === 'ECONNABORTED' || message === 'Network Error') { // 请求超时
-                return Promise.reject('请求超时');
+                return Promise.reject(error);
             }
             return AxiosRequest.handleError(error);
         });

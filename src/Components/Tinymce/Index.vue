@@ -15,7 +15,6 @@
     import Editor from '@tinymce/tinymce-vue'
     import 'tinymce/themes/silver';
  
-
     //plugin
     import 'tinymce/plugins/image';
     import 'tinymce/plugins/imagetools';
@@ -64,9 +63,10 @@
                 init:{
                     baseUrl:'./tinymce',
                     suffix:'.min',
-                    language_url: '/tinymce/langs/zh_CN.js',
                     language: 'zh_CN',
-                    skin_url: '/tinymce/skins/ui/oxide-dark',
+                    content_css:'./tinymce/skins/content/default/content.css',
+                    language_url: './tinymce/langs/zh_CN.js',
+                    skin_url: './tinymce/skins/ui/oxide',
                     plugins: [
                         'paste lists advlist nonbreaking table autolink autosave link image imagetools charmap print preview anchor searchreplace code pagebreak insertdatetime wordcount fullscreen'
                     ],
@@ -155,8 +155,6 @@
                 this.active = false;
             }
         },
-
-
     
     };
 </script>

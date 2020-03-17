@@ -4,7 +4,7 @@
             class="avatar v-icon-hover"
         >
             <a-avatar size="large" :style="{'backgroundColor':color}" icon="user" />
-            <a class="ant-dropdown-link username">{{ userInfo.username }}</a>
+            <a class="ant-dropdown-link username">{{ userInfo.nickname }}</a>
         </div>
         <a-menu slot="overlay">
             <a-menu-item class="drop-item">

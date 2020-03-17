@@ -4,7 +4,7 @@
         <ARow>
             <ACol span="24">
                 <h3>tinymce</h3>
-                <tinymce v-model="value" :theme="'light'" />
+                <tinymce v-model="value" :disabled="disabled" ref="editor" />
             </ACol>
         </Arow>
     </div>
@@ -18,7 +18,8 @@
         },
         data() {
             return {
-                value:'<p>tinymce</p>'
+                value:'<p>tinymcesssssaasd asd asdasdaasdass ss</p>',
+                disabled:false
             };
         },
         created(){
@@ -26,7 +27,7 @@
     };
 </script>
 
-<style>
+<style lang="less" scoped>
 .ant-col-12{
     padding:20px;
 }

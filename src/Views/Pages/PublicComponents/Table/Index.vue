@@ -19,8 +19,10 @@
             :columns="columns" 
             :selected-keys.sync="selectedKeys"
             :is-reload.sync="isReload"
-            :data="loadData" 
+            :data="loadData"
+            :handler-data="handlerData" 
             is-number
+            is-export
         >
             <template #age="{value}">
                 <span style="color:red;font-size:24px;">{{ value }}</span>
@@ -91,6 +93,10 @@
             
         },
         methods:{
+            //处理数据
+            handlerData(data){
+                return data
+            },
             loadData(params) {
                 return new Promise((resolve,reject)=>{
                     userList(Object.assign(params,this.params)).then(res=>{
