@@ -58,7 +58,8 @@ module.exports = {
             new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
             // 生成仅包含颜色的替换样式（主题色等）
             createThemeColorReplacerPlugin()
-        ]
+        ],
+        
     },
     transpileDependencies: [],
     css: {

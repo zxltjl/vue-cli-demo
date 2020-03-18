@@ -27,6 +27,8 @@ const config = freeze({
     prefix:'demo',
     //localstorge过期时间(单位：天)
     expires:7,
+    // 高德地图应用key
+    amapKey: 'ad21a606b14d1c3788cd4444250de166',
 });
 
 export default config;

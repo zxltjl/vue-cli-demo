@@ -8,7 +8,7 @@
                 v-if="!item.children"
                 :key="item.name||index"
             >
-                <MySvg :type="'Home'" />
+                <MySvg :type="item.icon||'Home'" />
                 <span>{{ item.meta.title }}</span>
             </AMenuItem> 
             <ASubMenu
@@ -16,7 +16,7 @@
                 :key="item.name||index"
             >
                 <span slot="title">
-                    <MySvg :type="'Home'" />
+                    <MySvg :type="item.icon||'Home'" />
                     <span>{{ item.meta.title }}</span>
                 </span>
                 <template v-for="(item1,index1) in item.children">

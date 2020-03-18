@@ -3,6 +3,7 @@ export default [
         sort:2,
         path:'editor',
         name:'Editor',
+        icon:'Editor',
         meta:{
             title:'富文本编辑器'
         },

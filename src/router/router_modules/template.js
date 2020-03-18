@@ -4,6 +4,7 @@ export default [
         sort:3,
         path:'public-components',
         name:'PublicComponents',
+        icon:'Public',
         meta:{
             title:'公共组件'
         },
