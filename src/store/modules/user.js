@@ -16,6 +16,10 @@ export default {
             db.set('token',val);
         },
     },
+    getters:{
+        USER_INFO:(state)=>state.userInfo,
+        TOKEN:(state)=>state.token,
+    },
     actions:{   
         login({commit},val) {
             return new Promise((resolve,reject)=>{

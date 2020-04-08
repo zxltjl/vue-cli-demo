@@ -18,7 +18,7 @@
         },
         data() {
             return {
-                value:'<p>tinymcesssssaasd asd asdasdaasdass ss</p>',
+                value:'<p>this is tinymce</p>',
                 disabled:false
             };
         },

@@ -16,6 +16,10 @@
 - 色弱模式
 - 导航菜单布局
 - UI框架菜单风格  dark  light
-- menu封装
+- antd table封装（增删改查，分页，导出等）
+- 导航菜单menu封装
+- 路由标签tabs封装
+- 高德地图
+- tinymce富文本编辑器
 
 

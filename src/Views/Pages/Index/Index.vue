@@ -6,7 +6,8 @@
 </template>
 
 <script>
-    import MySvg from '../../layout/Components/Svg'
+    import MySvg from '../../layout/Components/Svg';
+    import {mapState,mapGetters} from 'vuex';
     export default {
         components:{
             MySvg
@@ -16,8 +17,14 @@
             
             };
         },
+        computed:{
+            ...mapGetters('user',['TOKEN']),
+            ...mapState('user',{
+                token:state=>state.token
+            })
+        },
         created() {
-
+            console.log(this.token)
         }
     };
 </script>

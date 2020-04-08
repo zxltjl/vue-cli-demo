@@ -84,6 +84,7 @@
                 </span>
                 <a-switch
                     class="demo-vertical"
+                    :checked="isWeakColor"
                     @change="switchChange"
                 />
             </div>
@@ -131,7 +132,7 @@
 </template>
 
 <script>
-    import { mapState, mapActions } from 'vuex';
+    import { mapState, mapActions,mapMutations } from 'vuex';
 
     import LightMenuSvg from '@/assets/svg/lightMenu.svg?inline';
     import DarkMenuSvg from '@/assets/svg/darkMenu.svg?inline';
@@ -190,6 +191,7 @@
                 isFixedHeader: state=>state.isFixedHeader,
                 isFixedSilder: state=>state.isFixedSilder,
                 layout: state=>state.layout,
+                isWeakColor: state=>state.isWeakColor
             }),
             isTabs:{
                 get:function(){
@@ -207,11 +209,13 @@
         },
         methods: {
             ...mapActions('app', ['ToggleState',]),
+            ...mapMutations('app',['changeWeakColor']),
             changeColor (color) {
                 this.ToggleState({ color });
                 updateThemes(color);
             },
             switchChange (val) {
+                this.changeWeakColor(val)
                 val ? document.body.classList.add('colorWeak') : document.body.classList.remove('colorWeak');
             },
             onClose () {

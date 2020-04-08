@@ -1,12 +1,13 @@
 export default {
     namespaced: true,
     state:{
-        color:'#722ED1',
+        color:'#FA541C',
         theme:'dark',
         layout:'vertical',
         isFixedSilder:true,//固定左侧菜单栏
         isFixedHeader:true,//固定haader
         isTabs:true,//是否显示tabs标签
+        isWeakColor:false,
         errorList:[],
     },
     mutations:{
@@ -17,6 +18,9 @@ export default {
         },
         addError:(state,value)=>{
             state.errorList.push(value);
+        },
+        changeWeakColor:(state,val)=>{
+            state.isWeakColor = val;
         }
     },
     actions:{
