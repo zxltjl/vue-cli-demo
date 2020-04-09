@@ -3,6 +3,7 @@
         <a-locale-provider :locale="locale">
             <RouterView />
         </a-locale-provider>
+
     </div>
 </template>
 
@@ -16,7 +17,6 @@
             };
         },
         created() {
-
         }
     };
 </script>

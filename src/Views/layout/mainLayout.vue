@@ -31,6 +31,7 @@
                         class="inline-block" 
                         style="cursor:pointer;" 
                         @click="collapsed = !collapsed"
+
                     >
                         <AIcon
                             class="trigger"

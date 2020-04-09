@@ -1,6 +1,6 @@
 <template>
     <div style="color:red;">
-        首页
+        首页dasd
         <MySvg :type="'Home'" />
     </div>
 </template>
